@@ -1,0 +1,1223 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>WorkLeaf — HR Management, Simplified.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --forest: #1B4332;
+    --forest-2: #14331f;
+    --leaf: #52B14F;          /* bright CTA leaf green */
+    --leaf-deep: #3F8E3D;
+    --sage-50: #F4FBF4;
+    --sage-100: #EAF7EA;
+    --sage-200: #D8F3DC;
+    --sage-300: #BFE5C4;
+    --sage-400: #94CF9B;
+    --ink: #0F1A14;
+    --ink-2: #28332B;
+    --mute: #5C6B61;
+    --line: #E4EFE5;
+    --line-2: #D6E7D8;
+    --bg: #FAFCFA;
+    --warn: #E58A2E;
+    --warn-bg: #FBE9D3;
+    --danger: #C04A3D;
+    --danger-bg: #F8DAD3;
+    --indigo: #4F46E5;
+    --indigo-soft: #E6E7FA;
+    --radius: 14px;
+    --radius-lg: 20px;
+    --shadow-sm: 0 1px 2px rgba(20,40,25,.04), 0 1px 0 rgba(20,40,25,.02);
+    --shadow-md: 0 4px 14px -6px rgba(20,40,25,.10), 0 2px 4px -2px rgba(20,40,25,.06);
+    --shadow-lg: 0 24px 60px -28px rgba(20,50,30,.25), 0 10px 24px -12px rgba(20,50,30,.10);
+  }
+  *,*::before,*::after { box-sizing: border-box; }
+  html,body { margin:0; padding:0; }
+  body {
+    font-family: 'Geist', ui-sans-serif, system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    font-feature-settings: 'ss01','cv11';
+    line-height: 1.45;
+  }
+  .mono { font-family: 'Geist Mono', ui-monospace, monospace; }
+
+  /* ---------- Layout ---------- */
+  .wrap { max-width: 1240px; margin: 0 auto; padding: 0 32px; }
+  section { padding: 110px 0; position: relative; }
+  @media (max-width: 720px) {
+    section { padding: 72px 0; }
+    .wrap { padding: 0 20px; }
+  }
+
+  /* ---------- Nav ---------- */
+  .nav {
+    position: sticky; top: 0; z-index: 50;
+    backdrop-filter: saturate(140%) blur(12px);
+    -webkit-backdrop-filter: saturate(140%) blur(12px);
+    background: rgba(250,252,250,.78);
+    border-bottom: 1px solid transparent;
+    transition: border-color .2s ease, background .2s ease;
+  }
+  .nav.scrolled { border-bottom-color: var(--line); background: rgba(250,252,250,.92); }
+  .nav-row {
+    display:flex; align-items:center; justify-content:space-between;
+    height: 72px;
+  }
+  .brand { display:flex; align-items:center; gap:10px; text-decoration:none; color:var(--ink); }
+  .brand-mark {
+    width: 32px; height: 32px; border-radius: 9px;
+    background: var(--leaf);
+    display:grid; place-items:center;
+    box-shadow: inset 0 -1px 0 rgba(0,0,0,.08);
+  }
+  .brand-name { font-weight: 700; font-size: 17px; letter-spacing: -0.01em; }
+  .nav-links {
+    display:flex; gap: 4px; align-items:center;
+  }
+  .nav-links a {
+    color: var(--ink-2); text-decoration:none; font-size: 14px; font-weight: 500;
+    padding: 8px 12px; border-radius: 8px; transition: background .15s, color .15s;
+  }
+  .nav-links a:hover { background: var(--sage-100); color: var(--forest); }
+  .nav-cta { display:flex; gap: 8px; align-items:center; }
+  @media (max-width: 880px) { .nav-links { display:none; } }
+
+  /* ---------- Buttons ---------- */
+  .btn {
+    display:inline-flex; align-items:center; gap: 8px;
+    padding: 11px 18px;
+    border-radius: 10px;
+    font: inherit; font-weight: 600; font-size: 14.5px;
+    text-decoration: none; cursor: pointer; border: 1px solid transparent;
+    transition: transform .08s ease, background .15s ease, box-shadow .15s ease, border-color .15s ease;
+    line-height: 1; white-space: nowrap;
+  }
+  .btn:active { transform: translateY(1px); }
+  .btn-primary {
+    background: var(--leaf); color: #fff;
+    box-shadow: 0 1px 0 rgba(255,255,255,.25) inset, 0 1px 2px rgba(20,40,25,.18), 0 6px 14px -6px rgba(82,177,79,.55);
+  }
+  .btn-primary:hover { background: var(--leaf-deep); }
+  .btn-dark {
+    background: var(--forest); color: #fff;
+    box-shadow: 0 1px 0 rgba(255,255,255,.08) inset;
+  }
+  .btn-dark:hover { background: var(--forest-2); }
+  .btn-ghost { background: transparent; color: var(--ink-2); border-color: var(--line-2); }
+  .btn-ghost:hover { background: #fff; border-color: #cfe0d1; }
+  .btn-soft { background: var(--sage-100); color: var(--forest); }
+  .btn-soft:hover { background: var(--sage-200); }
+  .btn-lg { padding: 14px 22px; font-size: 15px; border-radius: 11px; }
+
+  /* ---------- Pill / chip ---------- */
+  .chip {
+    display:inline-flex; align-items:center; gap: 8px;
+    padding: 6px 12px 6px 8px;
+    background: #fff;
+    border: 1px solid var(--line-2);
+    border-radius: 999px;
+    font-size: 12.5px; color: var(--ink-2); font-weight: 500;
+    box-shadow: var(--shadow-sm);
+  }
+  .chip .dot { width: 6px; height: 6px; border-radius: 999px; background: var(--leaf); box-shadow: 0 0 0 4px rgba(82,177,79,.18); }
+  .chip strong { color: var(--forest); font-weight: 600; }
+
+  /* ---------- Hero ---------- */
+  .hero {
+    padding: 56px 0 80px;
+    position: relative;
+    overflow: clip;
+  }
+  .hero::before {
+    content:""; position:absolute; inset: -200px -10% auto -10%; height: 720px;
+    background:
+      radial-gradient(60% 50% at 30% 30%, rgba(82,177,79,.10), transparent 70%),
+      radial-gradient(50% 60% at 80% 20%, rgba(27,67,50,.06), transparent 70%);
+    z-index: 0; pointer-events:none;
+  }
+  .hero-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 1.2fr);
+    gap: 64px;
+    align-items: center;
+    position: relative; z-index: 1;
+  }
+  @media (max-width: 1000px) {
+    .hero-grid { grid-template-columns: 1fr; gap: 48px; }
+  }
+  h1.hero-title {
+    font-size: clamp(44px, 6vw, 72px);
+    line-height: 1.02;
+    letter-spacing: -0.035em;
+    font-weight: 600;
+    margin: 22px 0 22px;
+    color: var(--ink);
+    text-wrap: balance;
+  }
+  h1.hero-title em {
+    font-style: normal;
+    color: var(--forest);
+    background: linear-gradient(180deg, transparent 62%, rgba(82,177,79,.28) 62%);
+    padding: 0 4px;
+  }
+  .hero-sub {
+    font-size: 19px; color: var(--mute); max-width: 520px;
+    line-height: 1.5;
+    text-wrap: pretty;
+  }
+  .hero-sub b { color: var(--ink-2); font-weight: 600; }
+  .hero-cta { display:flex; gap: 10px; margin-top: 32px; flex-wrap: wrap; }
+  .hero-foot {
+    display:flex; gap: 22px; margin-top: 28px;
+    color: var(--mute); font-size: 13px;
+    flex-wrap: wrap;
+  }
+  .hero-foot span { display:inline-flex; align-items:center; gap: 6px; }
+  .hero-foot svg { color: var(--leaf); }
+
+  /* ---------- Hero Mock ---------- */
+  .mock-wrap { position: relative; perspective: 1800px; }
+  .mock {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    box-shadow: var(--shadow-lg);
+    overflow: hidden;
+    position: relative;
+    transform: rotateY(-6deg) rotateX(4deg) rotate(.5deg);
+    transform-style: preserve-3d;
+  }
+  .mock-top {
+    height: 36px;
+    display:flex; align-items:center; gap:6px;
+    padding: 0 14px;
+    background: #FBFDFB;
+    border-bottom: 1px solid var(--line);
+  }
+  .mock-top .tl { width: 9px; height:9px; border-radius:50%; background: #E5EAE6; }
+  .mock-body { display:grid; grid-template-columns: 168px 1fr; min-height: 440px; }
+  .mock-side {
+    background: #FBFDFB; border-right: 1px solid var(--line);
+    padding: 16px 12px; display:flex; flex-direction:column; gap: 4px;
+  }
+  .mock-brand {
+    display:flex; align-items:center; gap: 8px; padding: 6px 6px 10px; margin-bottom: 4px;
+    border-bottom: 1px solid var(--line);
+  }
+  .mock-brand .b-mark { width: 22px; height:22px; border-radius: 6px; background: var(--leaf); display:grid; place-items:center; }
+  .mock-brand .b-name { font-size: 12.5px; font-weight: 700; }
+  .mock-brand .b-sub { font-size: 9px; color: var(--mute); letter-spacing: .08em; }
+  .mock-section { font-size: 9.5px; letter-spacing: .14em; color: var(--mute); padding: 10px 8px 4px; font-weight: 500; }
+  .mock-item { display:flex; align-items:center; gap: 8px; padding: 7px 8px; border-radius: 7px; font-size: 12px; color: var(--ink-2); }
+  .mock-item.active { background: var(--sage-200); color: var(--forest); font-weight: 600; }
+  .mock-item .ico { width: 14px; height:14px; opacity:.7; }
+  .mock-item.active .ico { opacity: 1; color: var(--forest); }
+  .mock-item .badge { margin-left:auto; background: #fde2dd; color: #b03b2d; font-size: 9px; padding: 1px 6px; border-radius: 999px; font-weight: 600; }
+  .mock-main { padding: 18px; display:flex; flex-direction:column; gap: 14px; background: #fff; }
+  .mock-h { font-weight: 700; font-size: 16px; letter-spacing: -0.01em; }
+  .mock-sh { font-size: 11px; color: var(--mute); margin-top: 2px; }
+  .mock-row { display:grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+  .mock-stat {
+    border: 1px solid var(--sage-200); background: var(--sage-50);
+    border-radius: 10px; padding: 10px 11px;
+  }
+  .mock-stat .lbl { font-size: 8.5px; letter-spacing:.12em; color: var(--forest); font-weight: 600; }
+  .mock-stat .num { font-size: 20px; font-weight: 700; letter-spacing: -0.02em; margin-top: 6px; }
+  .mock-stat .sub { font-size: 9.5px; color: var(--mute); margin-top: 2px; }
+  .mock-stat .pill {
+    display:inline-block; margin-top: 6px; padding: 2px 7px; font-size: 9px;
+    background: #fff; border: 1px solid var(--sage-300); color: var(--forest);
+    border-radius: 999px; font-weight: 600;
+  }
+  .mock-card {
+    border: 1px solid var(--line); border-radius: 12px; padding: 12px 13px;
+  }
+  .mock-card .ttl { font-size: 12.5px; font-weight: 700; }
+  .mock-card .lk { font-size: 10px; color: var(--leaf-deep); font-weight: 600; }
+  .mock-card .head { display:flex; align-items:center; justify-content:space-between; margin-bottom: 10px;}
+  /* Table */
+  .mock-tbl { width:100%; border-collapse: collapse; font-size: 10.5px; }
+  .mock-tbl th { background: var(--sage-50); text-align:left; font-size: 8.5px; letter-spacing: .12em; color: var(--forest); font-weight: 600; padding: 6px 8px; }
+  .mock-tbl td { padding: 7px 8px; border-top: 1px solid var(--line); }
+  .status {
+    font-size: 9px; padding: 2px 7px; border-radius: 999px; font-weight: 600;
+  }
+  .status.ok { background: var(--sage-200); color: var(--forest); }
+  .status.warn { background: var(--warn-bg); color: var(--warn); }
+  /* Mini bar chart */
+  .bars { display:flex; align-items:flex-end; gap: 10px; height: 78px; padding-top: 6px; }
+  .bar-col { display:flex; align-items:flex-end; gap: 2px; flex: 1; }
+  .bar { flex: 1; border-radius: 3px 3px 0 0; }
+  .bar.g { background: var(--leaf); }
+  .bar.o { background: var(--warn); }
+  .bars-axis { display:flex; justify-content:space-between; font-size: 9px; color: var(--mute); padding: 6px 0 0; }
+
+  /* Floating accent card */
+  .mock-float {
+    position: absolute;
+    background: #fff; border: 1px solid var(--line);
+    border-radius: 12px; padding: 12px 14px;
+    box-shadow: var(--shadow-md);
+    display:flex; gap: 12px; align-items:center;
+    transform: rotate(-3deg);
+  }
+  .mock-float .av {
+    width: 32px; height: 32px; border-radius: 50%; background: var(--leaf);
+    color:#fff; font-size: 11.5px; font-weight: 700; display:grid; place-items:center;
+  }
+  .mock-float .t1 { font-size: 12px; font-weight: 600; }
+  .mock-float .t2 { font-size: 10.5px; color: var(--mute); margin-top: 1px; }
+  .mock-float.tl { top: -22px; left: -28px; }
+  .mock-float.br { bottom: -20px; right: -28px; transform: rotate(2deg); }
+  .mock-float .check {
+    width: 22px; height:22px; border-radius: 50%; background: var(--sage-200); color: var(--forest);
+    display:grid; place-items:center;
+  }
+  @media (max-width: 1000px) {
+    .mock-float.tl { left: 0; top: -28px; }
+    .mock-float.br { right: 0; bottom: -28px; }
+  }
+  @media (max-width: 540px) {
+    .mock-float { display:none; }
+    .mock { transform: none; }
+  }
+
+  /* ---------- Section heads ---------- */
+  .eyebrow {
+    display:inline-flex; align-items:center; gap: 8px;
+    color: var(--forest); font-size: 12.5px; font-weight: 600;
+    letter-spacing: .04em; text-transform: uppercase;
+    padding: 5px 10px; border-radius: 999px;
+    background: var(--sage-100); border: 1px solid var(--sage-200);
+  }
+  h2.sec-title {
+    font-size: clamp(34px, 4vw, 50px); letter-spacing: -0.03em;
+    font-weight: 600; line-height: 1.05; margin: 18px 0 14px;
+    text-wrap: balance;
+  }
+  h2.sec-title em { font-style: normal; color: var(--forest); }
+  .sec-sub {
+    font-size: 18px; color: var(--mute); max-width: 640px; line-height: 1.5;
+    text-wrap: pretty;
+  }
+  .sec-head { max-width: 760px; margin-bottom: 56px; }
+  .sec-head.center { margin-left:auto; margin-right:auto; text-align:center; }
+  .sec-head.center .sec-sub { margin: 0 auto; }
+
+  /* ---------- Trusted by ---------- */
+  .trust {
+    padding: 24px 0 40px;
+  }
+  .trust-row {
+    display:flex; gap: 56px; align-items:center; justify-content:center;
+    flex-wrap:wrap; padding: 18px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);
+  }
+  .trust-row .label {
+    color: var(--mute); font-size: 12.5px; letter-spacing: .04em;
+    font-weight: 500;
+  }
+  .logo-w {
+    color: var(--ink-2); opacity: .55; font-weight: 600; font-size: 16px;
+    letter-spacing: -0.02em;
+    transition: opacity .2s;
+  }
+  .logo-w:hover { opacity: .9; }
+
+  /* ---------- Problem ---------- */
+  .problem {
+    background: var(--forest);
+    color: #E8F2EA;
+    border-radius: 28px;
+    margin: 0 32px;
+    padding: 92px 0;
+    position: relative; overflow: hidden;
+  }
+  .problem::before {
+    content:""; position:absolute; inset:0;
+    background:
+      radial-gradient(60% 80% at 100% 0%, rgba(82,177,79,.16), transparent 60%),
+      radial-gradient(50% 60% at 0% 100%, rgba(216,243,220,.06), transparent 60%);
+    pointer-events:none;
+  }
+  .problem .wrap { position: relative; }
+  .problem .eyebrow {
+    background: rgba(216,243,220,.10); border-color: rgba(216,243,220,.18); color: #BFE5C4;
+  }
+  .problem h2.sec-title { color: #fff; }
+  .problem h2.sec-title em { color: var(--sage-300); }
+  .problem .sec-sub { color: #B6CDBA; }
+  .pains {
+    display:grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
+    margin-top: 56px;
+  }
+  @media (max-width: 880px) { .pains { grid-template-columns: 1fr; } }
+  .pain {
+    background: rgba(255,255,255,.04);
+    border: 1px solid rgba(216,243,220,.10);
+    border-radius: 18px;
+    padding: 28px 26px;
+  }
+  .pain-ico {
+    width: 42px; height: 42px; border-radius: 12px;
+    background: rgba(82,177,79,.18); color: var(--sage-300);
+    display:grid; place-items:center; margin-bottom: 18px;
+  }
+  .pain h3 { font-size: 19px; font-weight: 600; letter-spacing: -0.01em; margin: 0 0 8px; color: #fff; }
+  .pain p { margin: 0; color: #B6CDBA; font-size: 14.5px; line-height: 1.55; }
+  .pain .num { font-family: 'Geist Mono', monospace; color: var(--sage-400); font-size: 11px; margin-bottom: 12px; display:block; letter-spacing: .1em; }
+
+  /* ---------- Features ---------- */
+  .features-grid {
+    display:grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
+  }
+  @media (max-width: 920px) { .features-grid { grid-template-columns: repeat(2,1fr); } }
+  @media (max-width: 600px) { .features-grid { grid-template-columns: 1fr; } }
+
+  .feat {
+    background: #fff; border: 1px solid var(--line);
+    border-radius: 18px; padding: 28px 26px 30px;
+    transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+  }
+  .feat:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); border-color: var(--sage-300); }
+  .feat-ico {
+    width: 44px; height: 44px; border-radius: 12px;
+    background: var(--sage-100); color: var(--forest);
+    display:grid; place-items:center; margin-bottom: 22px;
+    border: 1px solid var(--sage-200);
+  }
+  .feat h3 { font-size: 18px; margin: 0 0 8px; font-weight: 600; letter-spacing: -0.01em; }
+  .feat p { margin: 0; font-size: 14.5px; color: var(--mute); line-height: 1.55; }
+  .feat .tag {
+    display:inline-block; margin-top: 16px;
+    font-size: 11.5px; color: var(--forest); font-weight: 600;
+    padding: 3px 9px; background: var(--sage-100); border-radius: 6px;
+    font-family: 'Geist Mono', monospace; letter-spacing: 0;
+  }
+
+  /* Feature large card (showcase) */
+  .showcase {
+    margin-top: 28px;
+    background: linear-gradient(180deg, var(--sage-50), #fff);
+    border: 1px solid var(--sage-200);
+    border-radius: 24px;
+    padding: 48px 48px 0;
+    display:grid; grid-template-columns: 1fr 1.15fr; gap: 36px; align-items: end;
+    overflow: hidden;
+  }
+  @media (max-width: 920px) { .showcase { grid-template-columns: 1fr; padding: 36px 28px 0; } }
+  .showcase .copy { padding-bottom: 48px; }
+  .showcase h3 { font-size: 28px; font-weight: 600; letter-spacing: -0.02em; margin: 12px 0 10px; }
+  .showcase p { color: var(--mute); font-size: 16px; line-height: 1.55; margin: 0 0 22px; max-width: 420px; }
+  .showcase .bullets { display:flex; flex-direction:column; gap: 10px; }
+  .showcase .bullets li { display:flex; align-items:center; gap: 10px; font-size: 14.5px; color: var(--ink-2); }
+  .showcase .bullets li::before {
+    content: ""; width: 16px; height: 16px; border-radius: 50%;
+    background: var(--leaf); color: #fff;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><path d='M4 8.2l2.4 2.4L12 5' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/></svg>");
+    background-size: contain;
+    flex-shrink: 0;
+  }
+  .showcase ul { list-style:none; padding:0; margin: 0; }
+  .showcase-mock {
+    background: #fff; border: 1px solid var(--line);
+    border-top-left-radius: 16px; border-top-right-radius: 16px;
+    border-bottom: 0;
+    padding: 18px 22px 22px;
+    box-shadow: 0 -20px 60px -30px rgba(20,50,30,.18);
+    margin-right: -16px; margin-bottom: -1px;
+  }
+
+  /* ---------- Testimonials ---------- */
+  .tests {
+    display:grid; grid-template-columns: repeat(3, 1fr); gap: 18px;
+  }
+  @media (max-width: 920px) { .tests { grid-template-columns: 1fr; } }
+  .test {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    padding: 28px 26px;
+    display:flex; flex-direction:column; gap: 18px;
+  }
+  .test:nth-child(2) { background: var(--forest); border-color: var(--forest); color:#fff; }
+  .test:nth-child(2) .who .name { color:#fff; }
+  .test:nth-child(2) .who .role { color: #B6CDBA; }
+  .test:nth-child(2) blockquote { color: #E8F2EA; }
+  .test:nth-child(2) .stars { color: var(--sage-300); }
+  .test:nth-child(2) .av { background: var(--leaf); }
+  .stars {
+    display:flex; gap: 1px; color: var(--leaf);
+  }
+  .test blockquote {
+    margin: 0; font-size: 17px; line-height: 1.45; color: var(--ink);
+    letter-spacing: -0.005em;
+    text-wrap: pretty;
+  }
+  .test .who { display:flex; align-items:center; gap: 12px; margin-top: auto; }
+  .test .av {
+    width: 38px; height: 38px; border-radius: 50%; background: var(--sage-300);
+    color: var(--forest); font-weight: 700; display:grid; place-items:center; font-size: 13px;
+  }
+  .test .who .name { font-weight: 600; font-size: 14.5px; color: var(--ink); }
+  .test .who .role { font-size: 12.5px; color: var(--mute); margin-top: 1px; }
+
+  /* ---------- Pricing ---------- */
+  .pricing {
+    background: var(--sage-50);
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+  }
+  .price-grid {
+    display:grid; grid-template-columns: repeat(3, 1fr); gap: 18px;
+    align-items: stretch;
+  }
+  @media (max-width: 920px) { .price-grid { grid-template-columns: 1fr; } }
+  .price {
+    background: #fff; border: 1px solid var(--line);
+    border-radius: 20px; padding: 32px 30px 36px;
+    display:flex; flex-direction:column;
+    position: relative;
+  }
+  .price.feat-tier {
+    background: var(--forest); border-color: var(--forest); color: #fff;
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-8px);
+  }
+  .price.feat-tier .tier-sub { color: #B6CDBA; }
+  .price.feat-tier .feature { color: #E8F2EA; }
+  .price.feat-tier .feature::before { background: var(--leaf); }
+  .price.feat-tier .price-amount { color: #fff; }
+  .price.feat-tier .price-unit { color: #B6CDBA; }
+  .price.feat-tier hr { border-color: rgba(216,243,220,.14); }
+  .ribbon {
+    position:absolute; top:14px; right:14px;
+    background: var(--leaf); color:#fff;
+    font-size: 11px; font-weight: 600; padding: 4px 10px; border-radius: 999px;
+    letter-spacing: .02em;
+  }
+  .tier-name { font-size: 13px; font-weight: 600; color: var(--forest); letter-spacing: .08em; text-transform: uppercase; }
+  .price.feat-tier .tier-name { color: var(--sage-300); }
+  .tier-sub { font-size: 14px; color: var(--mute); margin-top: 6px; }
+  .price-amount {
+    font-size: 56px; font-weight: 600; letter-spacing: -0.04em; margin: 22px 0 4px;
+    color: var(--ink);
+  }
+  .price-unit { font-size: 14px; color: var(--mute); }
+  .price hr { border: 0; border-top: 1px solid var(--line); margin: 22px 0; }
+  .features-list { list-style:none; padding:0; margin: 0 0 28px; display:flex; flex-direction:column; gap: 12px; }
+  .feature { font-size: 14.5px; color: var(--ink-2); display:flex; align-items: center; gap: 10px; }
+  .feature::before {
+    content:""; width: 16px; height:16px; border-radius: 50%; background: var(--leaf);
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><path d='M4 8.2l2.4 2.4L12 5' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/></svg>");
+    background-size: contain;
+    flex-shrink:0;
+  }
+  .price .btn { width: 100%; justify-content:center; margin-top: auto; }
+
+  /* ---------- Final CTA ---------- */
+  .cta-band {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 28px;
+    padding: 64px;
+    display: grid; grid-template-columns: 1.2fr .9fr; gap: 36px;
+    align-items: center;
+    box-shadow: var(--shadow-md);
+    overflow: hidden;
+    position: relative;
+  }
+  .cta-band::after {
+    content:""; position:absolute; inset: auto -10% -50% auto; width: 480px; height: 480px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(82,177,79,.12), transparent 60%);
+    pointer-events:none;
+  }
+  @media (max-width: 880px) { .cta-band { grid-template-columns: 1fr; padding: 36px 28px; } }
+  .cta-band h2 { font-size: clamp(32px, 4vw, 44px); letter-spacing: -0.03em; line-height: 1.06; margin: 0 0 14px; font-weight: 600; }
+  .cta-band p { color: var(--mute); margin: 0 0 24px; font-size: 17px; }
+  .cta-actions { display:flex; gap: 10px; flex-wrap: wrap; }
+  .cta-mini-mock {
+    border: 1px solid var(--line); border-radius: 14px; padding: 18px; background: var(--sage-50);
+    position: relative; z-index: 1;
+  }
+  .cta-mini-mock .row { display:flex; justify-content:space-between; align-items:center; padding: 8px 0; font-size: 13px; border-bottom: 1px solid var(--line); }
+  .cta-mini-mock .row:last-child { border-bottom:0; }
+  .cta-mini-mock .row .name { color: var(--ink-2); font-weight: 500; }
+  .cta-mini-mock .row .stat { font-size: 11px; padding: 2px 8px; border-radius: 999px; font-weight: 600; }
+  .cta-mini-mock .row .stat.ok { background: var(--sage-200); color: var(--forest); }
+  .cta-mini-mock .row .stat.warn { background: var(--warn-bg); color: var(--warn); }
+  .cta-mini-mock .ttl { font-size: 12px; font-weight: 600; color: var(--forest); letter-spacing: .06em; text-transform: uppercase; margin-bottom: 8px; }
+
+  /* ---------- Footer ---------- */
+  footer {
+    padding: 80px 0 40px;
+  }
+  .foot-grid {
+    display:grid; grid-template-columns: 1.4fr repeat(4, 1fr); gap: 40px;
+  }
+  @media (max-width: 880px) { .foot-grid { grid-template-columns: 1fr 1fr; gap: 32px; } }
+  .foot-brand .brand-name { font-size: 18px; }
+  .foot-brand p { color: var(--mute); font-size: 14px; margin: 16px 0 18px; max-width: 280px; line-height: 1.55; }
+  .foot-col h4 {
+    font-size: 12.5px; font-weight: 600; color: var(--ink); margin: 0 0 16px;
+    letter-spacing: .04em;
+  }
+  .foot-col a {
+    display:block; color: var(--mute); text-decoration:none; font-size: 14px;
+    padding: 5px 0; transition: color .15s;
+  }
+  .foot-col a:hover { color: var(--forest); }
+  .foot-bottom {
+    margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--line);
+    display:flex; justify-content:space-between; align-items:center;
+    color: var(--mute); font-size: 13px;
+    flex-wrap: wrap; gap: 12px;
+  }
+  .foot-bottom .socials { display:flex; gap: 8px; }
+  .foot-bottom .socials a {
+    width: 32px; height:32px; border-radius: 8px; background: #fff; border: 1px solid var(--line);
+    display:grid; place-items:center; color: var(--mute);
+    transition: color .15s, border-color .15s, background .15s;
+  }
+  .foot-bottom .socials a:hover { color: var(--forest); border-color: var(--sage-300); background: var(--sage-50); }
+
+  /* ---------- Reveal animation ---------- */
+  .reveal { opacity: 0; transform: translateY(14px); transition: opacity .6s ease, transform .6s ease; }
+  .reveal.in { opacity: 1; transform: none; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .reveal { opacity: 1; transform: none; transition: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ===================== LEAF LOGO SVG SYMBOL ===================== -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="leaf-logo" viewBox="0 0 24 24">
+      <!-- Stylized leaf: teardrop + stem curve -->
+      <path d="M19.5 4.5C19.5 12.6 14.6 19 8 19.5c-.6.04-2.2-.1-3-.6C7.5 12.5 12 7 19.5 4.5Z" fill="#fff" stroke="#fff" stroke-width="0" />
+      <path d="M5.5 19.5 C 9 14 13 9.5 19 5.2" fill="none" stroke="#1B4332" stroke-width="1.4" stroke-linecap="round"/>
+    </symbol>
+  </defs>
+</svg>
+
+<!-- ===================== NAV ===================== -->
+<header class="nav" id="nav">
+  <div class="wrap nav-row">
+    <a class="brand" href="#">
+      <span class="brand-mark"><svg width="20" height="20"><use href="#leaf-logo"/></svg></span>
+      <span class="brand-name">WorkLeaf</span>
+    </a>
+    <nav class="nav-links" aria-label="Main">
+      <a href="#features">Product</a>
+      <a href="#problem">Why WorkLeaf</a>
+      <a href="#testimonials">Customers</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#">Docs</a>
+    </nav>
+    <div class="nav-cta">
+      <a class="btn btn-ghost" href="#">Sign in</a>
+      <a class="btn btn-primary" href="#pricing">Get started</a>
+    </div>
+  </div>
+</header>
+
+<!-- ===================== HERO ===================== -->
+<section class="hero" data-screen-label="01 Hero">
+  <div class="wrap hero-grid">
+    <div class="hero-copy reveal">
+      <span class="chip"><span class="dot"></span>New &nbsp;·&nbsp; <strong>AI leave summaries</strong> &nbsp;→</span>
+      <h1 class="hero-title">HR management,<br/><em>simplified.</em></h1>
+      <p class="hero-sub">
+        Run leave, attendance, and payroll for your whole team — without paying
+        <b>$8 per employee, per month</b> for software your HR lead barely uses.
+        WorkLeaf gives small and mid-sized businesses the tools, at a flat price.
+      </p>
+      <div class="hero-cta">
+        <a class="btn btn-primary btn-lg" href="#pricing">Get started free
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+        </a>
+        <a class="btn btn-ghost btn-lg" href="#showcase">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polygon points="6 3 20 12 6 21 6 3" fill="currentColor" stroke="none"/></svg>
+          View demo
+        </a>
+      </div>
+      <div class="hero-foot">
+        <span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Free for teams up to 10</span>
+        <span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> No credit card</span>
+        <span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Setup in 4 minutes</span>
+      </div>
+    </div>
+
+    <div class="mock-wrap reveal" aria-hidden="true">
+      <div class="mock">
+        <div class="mock-top">
+          <span class="tl"></span><span class="tl"></span><span class="tl"></span>
+        </div>
+        <div class="mock-body">
+          <aside class="mock-side">
+            <div class="mock-brand">
+              <span class="b-mark"><svg width="14" height="14"><use href="#leaf-logo"/></svg></span>
+              <div>
+                <div class="b-name">WorkLeaf</div>
+                <div class="b-sub">ADMIN PORTAL</div>
+              </div>
+            </div>
+            <div class="mock-section">OVERVIEW</div>
+            <div class="mock-item active">
+              <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+              Dashboard
+            </div>
+            <div class="mock-section">MANAGEMENT</div>
+            <div class="mock-item">
+              <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.5"/><circle cx="17" cy="9" r="2.5"/><path d="M2.5 20c1-3.5 4-5 6.5-5s5.5 1.5 6.5 5"/><path d="M15 20c.6-2 2-3 3.5-3s2.5 1 3 3"/></svg>
+              Employees <span class="badge">48</span>
+            </div>
+            <div class="mock-item">
+              <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>
+              Leave Requests <span class="badge">7</span>
+            </div>
+            <div class="mock-item">
+              <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 16l4-6 4 3 5-8 5 7"/></svg>
+              Analytics
+            </div>
+            <div class="mock-item">
+              <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="13" rx="2"/><path d="M2 11h20"/></svg>
+              Payroll
+            </div>
+          </aside>
+
+          <main class="mock-main">
+            <div>
+              <div class="mock-h">Company Overview</div>
+              <div class="mock-sh">WorkLeaf · Tuesday, 19 May 2026</div>
+            </div>
+
+            <div class="mock-row">
+              <div class="mock-stat">
+                <div class="lbl">EMPLOYEES</div>
+                <div class="num">48</div>
+                <div class="sub">all departments</div>
+                <span class="pill">+3 this month</span>
+              </div>
+              <div class="mock-stat">
+                <div class="lbl">ON LEAVE</div>
+                <div class="num">5</div>
+                <div class="sub">approved today</div>
+                <span class="pill" style="background:var(--warn-bg); border-color:#f1c391; color:var(--warn)">Out of office</span>
+              </div>
+              <div class="mock-stat">
+                <div class="lbl">PENDING</div>
+                <div class="num">7</div>
+                <div class="sub">need action</div>
+                <span class="pill" style="background:var(--danger-bg); border-color:#e9a89e; color:var(--danger)">Urgent</span>
+              </div>
+              <div class="mock-stat">
+                <div class="lbl">PAYROLL</div>
+                <div class="num">Apr 28</div>
+                <div class="sub">26 days away</div>
+                <span class="pill">Upcoming</span>
+              </div>
+            </div>
+
+            <div class="mock-card">
+              <div class="head">
+                <div class="ttl">Pending Approvals</div>
+                <div class="lk">View all →</div>
+              </div>
+              <table class="mock-tbl">
+                <thead><tr><th>EMPLOYEE</th><th>TYPE</th><th>DATES</th><th>STATUS</th></tr></thead>
+                <tbody>
+                  <tr><td>Aditya Sharma</td><td>Annual Leave</td><td>Apr 10–12</td><td><span class="status warn">Pending</span></td></tr>
+                  <tr><td>Neha Rao</td><td>Sick Leave</td><td>Apr 3</td><td><span class="status warn">Pending</span></td></tr>
+                  <tr><td>Ravi Menon</td><td>WFH</td><td>Apr 4–5</td><td><span class="status ok">Approved</span></td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="mock-card">
+              <div class="head">
+                <div class="ttl">March Attendance</div>
+                <div class="lk" style="font-family:'Geist Mono'; font-size:9px; color:var(--mute)">PRESENT · LEAVE</div>
+              </div>
+              <div class="bars">
+                <div class="bar-col"><div class="bar g" style="height: 90%"></div></div>
+                <div class="bar-col"><div class="bar g" style="height: 96%"></div></div>
+                <div class="bar-col"><div class="bar g" style="height: 78%"></div><div class="bar o" style="height: 18%; width: 10px;"></div></div>
+                <div class="bar-col"><div class="bar g" style="height: 92%"></div></div>
+                <div class="bar-col"><div class="bar g" style="height: 88%"></div></div>
+              </div>
+              <div class="bars-axis"><span>Week 1</span><span>Week 2</span><span>Week 3</span><span>Week 4</span><span>Week 5</span></div>
+            </div>
+          </main>
+        </div>
+      </div>
+
+      <!-- Floating accent cards -->
+      <div class="mock-float tl">
+        <div class="check">
+          <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 8 7 12 13 4"/></svg>
+        </div>
+        <div>
+          <div class="t1">Leave approved</div>
+          <div class="t2">Annual Leave · Apr 10–12</div>
+        </div>
+      </div>
+      <div class="mock-float br">
+        <div class="av">FM</div>
+        <div>
+          <div class="t1">Payroll ready</div>
+          <div class="t2">48 employees · ₹38.4L</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== TRUST ===================== -->
+<section class="trust" aria-label="Trusted by">
+  <div class="wrap">
+    <div class="trust-row">
+      <span class="label">Trusted by lean HR teams at</span>
+      <span class="logo-w">Northwind</span>
+      <span class="logo-w">Quill&nbsp;&amp;&nbsp;Co</span>
+      <span class="logo-w">Mosaic Labs</span>
+      <span class="logo-w">Acre Studio</span>
+      <span class="logo-w">Halcyon</span>
+      <span class="logo-w">Riverbend</span>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== PROBLEM ===================== -->
+<section id="problem" data-screen-label="02 Problem" style="padding-bottom: 40px;">
+  <div class="problem">
+    <div class="wrap reveal">
+      <span class="eyebrow">The problem</span>
+      <h2 class="sec-title">Stop paying <em>per employee.</em><br/>HRMS shouldn't tax your headcount.</h2>
+      <p class="sec-sub">
+        Most HR platforms charge $6–$12 per employee, per month — fine when you have 8 people,
+        painful at 80. WorkLeaf is one flat price for the whole team.
+      </p>
+
+      <div class="pains">
+        <div class="pain">
+          <div class="pain-ico">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="2" x2="12" y2="22"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          </div>
+          <span class="num">01 / COST</span>
+          <h3>Costs scale with hiring</h3>
+          <p>Every new hire bumps your subscription. Growing a team shouldn't punish you with a surprise renewal quote.</p>
+        </div>
+        <div class="pain">
+          <div class="pain-ico">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M9 12l2 2 4-4"/><line x1="3" y1="9" x2="21" y2="9"/></svg>
+          </div>
+          <span class="num">02 / SPRAWL</span>
+          <h3>Built for enterprise, not you</h3>
+          <p>You're sold 200 features to use 12. Onboarding takes weeks. Half the modules sit unused while you keep paying for them.</p>
+        </div>
+        <div class="pain">
+          <div class="pain-ico">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+          </div>
+          <span class="num">03 / TIME</span>
+          <h3>HR drowns in spreadsheets</h3>
+          <p>Leave in one sheet, attendance in another, payroll in a third. Manual reconciliation eats a full day every payroll cycle.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== FEATURES ===================== -->
+<section id="features" data-screen-label="03 Features">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow">What's inside</span>
+      <h2 class="sec-title">Everything HR needs.<br/><em>Nothing it doesn't.</em></h2>
+      <p class="sec-sub">Six core modules, deeply integrated. Switch from your existing HRMS in an afternoon, not a quarter.</p>
+    </div>
+
+    <div class="features-grid">
+
+      <div class="feat reveal">
+        <div class="feat-ico">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4M9 14h2M14 14h2M9 18h2"/></svg>
+        </div>
+        <h3>Employee Leave Management</h3>
+        <p>Request, approve, and balance leave in seconds. Annual, sick, casual, WFH — each with its own policy and accrual.</p>
+        <span class="tag">01 — Leave</span>
+      </div>
+
+      <div class="feat reveal">
+        <div class="feat-ico">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2.5"/></svg>
+        </div>
+        <h3>Attendance Tracking</h3>
+        <p>Web check-in, IP-restricted clock-in, or geofence — pick the rules per team. Spot patterns before they cost you.</p>
+        <span class="tag">02 — Attendance</span>
+      </div>
+
+      <div class="feat reveal">
+        <div class="feat-ico">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="13" rx="2"/><path d="M2 11h20"/><circle cx="18" cy="15" r="1.2" fill="currentColor"/></svg>
+        </div>
+        <h3>Payroll Overview</h3>
+        <p>Run payroll in two clicks. Gross, deductions, PF, TDS, and net — calculated, reviewed, and disbursed in one place.</p>
+        <span class="tag">03 — Payroll</span>
+      </div>
+
+      <div class="feat reveal">
+        <div class="feat-ico">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 16l4-6 4 3 5-8 5 7"/><path d="M3 20h18"/></svg>
+        </div>
+        <h3>HR Analytics Dashboard</h3>
+        <p>Headcount, attendance, leave-by-type, attrition risk — surfaced as charts your CFO actually wants to see.</p>
+        <span class="tag">04 — Analytics</span>
+      </div>
+
+      <div class="feat reveal">
+        <div class="feat-ico">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 4v5c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V7l8-4z"/><path d="M9 12l2 2 4-4"/></svg>
+        </div>
+        <h3>Admin Controls</h3>
+        <p>Audit trails, approval chains, policy templates, holiday calendars. Set them once — let the team self-serve.</p>
+        <span class="tag">05 — Admin</span>
+      </div>
+
+      <div class="feat reveal">
+        <div class="feat-ico">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.5"/><path d="M2 20c1-4 4-6 7-6"/><path d="M14 14l2 2 4-4"/><circle cx="17" cy="17" r="5"/></svg>
+        </div>
+        <h3>Role-Based Access</h3>
+        <p>Employee, Manager, HR, Finance, Admin — each role sees exactly what it should. SSO and 2FA included.</p>
+        <span class="tag">06 — RBAC</span>
+      </div>
+
+    </div>
+
+    <!-- Big showcase card -->
+    <div class="showcase reveal" id="showcase">
+      <div class="copy">
+        <span class="eyebrow">Analytics</span>
+        <h3>Spot the trends your spreadsheet hides.</h3>
+        <p>Departmental attendance, leave-type mix, approval velocity, attrition pulse. WorkLeaf cuts a monthly board-deck slide down to a Tuesday-afternoon glance.</p>
+        <ul class="bullets">
+          <li>Filter by quarter, department, or person in one click</li>
+          <li>Export to CSV, PDF, or send straight to Slack</li>
+          <li>Anomaly alerts when sick-leave clusters in a team</li>
+        </ul>
+      </div>
+      <div class="showcase-mock">
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom: 14px;">
+          <div style="font-weight:700; font-size:15px;">HR Analytics</div>
+          <div style="display:flex; gap:6px;">
+            <span style="font-size:10.5px; padding: 4px 9px; border-radius: 6px; background: var(--sage-100); color: var(--forest); font-weight: 600;">H1 · 2026</span>
+            <span style="font-size:10.5px; padding: 4px 9px; border-radius: 6px; background: #fff; border:1px solid var(--line); color: var(--mute); font-weight: 600;">All Eng</span>
+          </div>
+        </div>
+        <div style="display:grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap:8px; margin-bottom:14px;">
+          <div class="mock-stat" style="padding:8px 10px;"><div class="lbl">LEAVES</div><div class="num" style="font-size:17px;">42</div></div>
+          <div class="mock-stat" style="padding:8px 10px;"><div class="lbl">AVG/EMP</div><div class="num" style="font-size:17px;">2.1</div></div>
+          <div class="mock-stat" style="padding:8px 10px;"><div class="lbl">TOP TYPE</div><div class="num" style="font-size:17px;">Annual</div></div>
+          <div class="mock-stat" style="padding:8px 10px;"><div class="lbl">APPROVAL</div><div class="num" style="font-size:17px;">94%</div></div>
+        </div>
+        <!-- Mini line chart -->
+        <svg viewBox="0 0 320 110" preserveAspectRatio="none" style="width:100%; height:110px;">
+          <defs>
+            <linearGradient id="g1" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#52B14F" stop-opacity="0.25"/>
+              <stop offset="100%" stop-color="#52B14F" stop-opacity="0"/>
+            </linearGradient>
+          </defs>
+          <!-- gridlines -->
+          <line x1="0" y1="20" x2="320" y2="20" stroke="#EAF7EA" stroke-width="1"/>
+          <line x1="0" y1="55" x2="320" y2="55" stroke="#EAF7EA" stroke-width="1"/>
+          <line x1="0" y1="90" x2="320" y2="90" stroke="#EAF7EA" stroke-width="1"/>
+          <!-- area + line: Annual -->
+          <path d="M 0 30 L 64 50 L 128 14 L 192 48 L 256 50 L 320 30 L 320 110 L 0 110 Z" fill="url(#g1)"/>
+          <path d="M 0 30 L 64 50 L 128 14 L 192 48 L 256 50 L 320 30" fill="none" stroke="#3F8E3D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <!-- WFH line -->
+          <path d="M 0 78 L 64 70 L 128 70 L 192 76 L 256 80 L 320 70" fill="none" stroke="#E58A2E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <!-- Sick line -->
+          <path d="M 0 90 L 64 84 L 128 90 L 192 90 L 256 90 L 320 90" fill="none" stroke="#3B82F6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="3 3"/>
+          <!-- dots -->
+          <g fill="#3F8E3D"><circle cx="0" cy="30" r="3"/><circle cx="64" cy="50" r="3"/><circle cx="128" cy="14" r="3"/><circle cx="192" cy="48" r="3"/><circle cx="256" cy="50" r="3"/><circle cx="320" cy="30" r="3"/></g>
+        </svg>
+        <div style="display:flex; justify-content:space-between; font-size:10.5px; color: var(--mute); margin-top:6px;">
+          <span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>May</span><span>Jun</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== TESTIMONIALS ===================== -->
+<section id="testimonials" data-screen-label="04 Testimonials" style="padding-top: 40px;">
+  <div class="wrap">
+    <div class="sec-head center reveal">
+      <span class="eyebrow">Customers</span>
+      <h2 class="sec-title">Built for teams that <em>actually run lean.</em></h2>
+      <p class="sec-sub">From 12-person studios to 300-person scale-ups — WorkLeaf is the HR portal HR leads pick when they're done with bloat.</p>
+    </div>
+
+    <div class="tests">
+      <article class="test reveal">
+        <div class="stars" aria-label="5 stars">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.9 7.1.6-5.4 4.7 1.6 7-6.2-3.8L5.8 21l1.6-7L2 9.5l7.1-.6L12 2z"/></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.9 7.1.6-5.4 4.7 1.6 7-6.2-3.8L5.8 21l1.6-7L2 9.5l7.1-.6L12 2z"/></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.9 7.1.6-5.4 4.7 1.6 7-6.2-3.8L5.8 21l1.6-7L2 9.5l7.1-.6L12 2z"/></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.9 7.1.6-5.4 4.7 1.6 7-6.2-3.8L5.8 21l1.6-7L2 9.5l7.1-.6L12 2z"/></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.9 7.1.6-5.4 4.7 1.6 7-6.2-3.8L5.8 21l1.6-7L2 9.5l7.1-.6L12 2z"/></svg>
+        </div>
+        <blockquote>"We switched from a per-seat HRMS and immediately saved ₹2.4L a year. The leave + payroll flow alone gives me a Friday afternoon back."</blockquote>
+        <div class="who">
+          <div class="av">PR</div>
+          <div>
+            <div class="name">Priya Rao</div>
+            <div class="role">Head of People · Acre Studio · 64 employees</div>
+          </div>
+        </div>
+      </article>
+
+      <article class="test reveal">
+        <div class="stars" aria-label="5 stars">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.9 7.1.6-5.4 4.7 1.6 7-6.2-3.8L5.8 21l1.6-7L2 9.5l7.1-.6L12 2z"/></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.9 7.1.6-5.4 4.7 1.6 7-6.2-3.8L5.8 21l1.6-7L2 9.5l7.1-.6L12 2z"/></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.9 7.1.6-5.4 4.7 1.6 7-6.2-3.8L5.8 21l1.6-7L2 9.5l7.1-.6L12 2z"/></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.9 7.1.6-5.4 4.7 1.6 7-6.2-3.8L5.8 21l1.6-7L2 9.5l7.1-.6L12 2z"/></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.9 7.1.6-5.4 4.7 1.6 7-6.2-3.8L5.8 21l1.6-7L2 9.5l7.1-.6L12 2z"/></svg>
+        </div>
+        <blockquote>"Honestly, the first HR tool that felt designed instead of compiled. Approvals are one tap. Payroll runs while I'm having coffee."</blockquote>
+        <div class="who">
+          <div class="av">DM</div>
+          <div>
+            <div class="name">Devika Mehta</div>
+            <div class="role">CEO · Mosaic Labs · 28 employees</div>
+          </div>
+        </div>
+      </article>
+
+      <article class="test reveal">
+        <div class="stars" aria-label="5 stars">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.9 7.1.6-5.4 4.7 1.6 7-6.2-3.8L5.8 21l1.6-7L2 9.5l7.1-.6L12 2z"/></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.9 7.1.6-5.4 4.7 1.6 7-6.2-3.8L5.8 21l1.6-7L2 9.5l7.1-.6L12 2z"/></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.9 7.1.6-5.4 4.7 1.6 7-6.2-3.8L5.8 21l1.6-7L2 9.5l7.1-.6L12 2z"/></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.9 7.1.6-5.4 4.7 1.6 7-6.2-3.8L5.8 21l1.6-7L2 9.5l7.1-.6L12 2z"/></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.9 7.1.6-5.4 4.7 1.6 7-6.2-3.8L5.8 21l1.6-7L2 9.5l7.1-.6L12 2z"/></svg>
+        </div>
+        <blockquote>"My team uses three tabs all day. WorkLeaf is one of them. The analytics dashboard finally gave me numbers I can take to the board."</blockquote>
+        <div class="who">
+          <div class="av">AR</div>
+          <div>
+            <div class="name">Arjun Rai</div>
+            <div class="role">COO · Halcyon · 142 employees</div>
+          </div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== PRICING ===================== -->
+<section id="pricing" class="pricing" data-screen-label="05 Pricing">
+  <div class="wrap">
+    <div class="sec-head center reveal">
+      <span class="eyebrow">Pricing</span>
+      <h2 class="sec-title">Flat pricing. <em>Forever.</em></h2>
+      <p class="sec-sub">One price for the whole team. Add employees, change plans, cancel anytime. No per-seat math.</p>
+    </div>
+
+    <div class="price-grid">
+
+      <div class="price reveal">
+        <div class="tier-name">Starter</div>
+        <div class="tier-sub">For teams just getting started</div>
+        <div class="price-amount">Free <span class="price-unit"></span></div>
+        <div class="price-unit">Up to 10 employees · forever</div>
+        <hr/>
+        <ul class="features-list">
+          <li class="feature">Leave & attendance</li>
+          <li class="feature">Employee self-serve portal</li>
+          <li class="feature">Holiday calendar</li>
+          <li class="feature">Email approvals</li>
+          <li class="feature">1 admin seat</li>
+        </ul>
+        <a class="btn btn-ghost" href="#">Start free</a>
+      </div>
+
+      <div class="price feat-tier reveal">
+        <span class="ribbon">Most popular</span>
+        <div class="tier-name">Growth</div>
+        <div class="tier-sub">For growing 10–100 person teams</div>
+        <div class="price-amount">₹4,999<span class="price-unit"> /mo</span></div>
+        <div class="price-unit">Unlimited employees · billed yearly</div>
+        <hr/>
+        <ul class="features-list">
+          <li class="feature">Everything in Starter</li>
+          <li class="feature">Payroll &amp; payslips</li>
+          <li class="feature">HR analytics dashboard</li>
+          <li class="feature">Role-based access (5 roles)</li>
+          <li class="feature">Multi-step approval chains</li>
+          <li class="feature">Slack &amp; Google Workspace</li>
+        </ul>
+        <a class="btn btn-primary" href="#">Start 14-day trial</a>
+      </div>
+
+      <div class="price reveal">
+        <div class="tier-name">Scale</div>
+        <div class="tier-sub">For 100+ person companies</div>
+        <div class="price-amount">₹9,999<span class="price-unit"> /mo</span></div>
+        <div class="price-unit">Unlimited everything · billed yearly</div>
+        <hr/>
+        <ul class="features-list">
+          <li class="feature">Everything in Growth</li>
+          <li class="feature">SSO + SCIM provisioning</li>
+          <li class="feature">Custom roles &amp; policies</li>
+          <li class="feature">Audit log exports</li>
+          <li class="feature">Dedicated account manager</li>
+          <li class="feature">99.9% SLA</li>
+        </ul>
+        <a class="btn btn-dark" href="#">Talk to sales</a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ===================== FINAL CTA ===================== -->
+<section data-screen-label="06 Final CTA">
+  <div class="wrap reveal">
+    <div class="cta-band">
+      <div>
+        <span class="eyebrow">Get started</span>
+        <h2 style="margin-top:18px;">Stop paying per head. <br/>Start in 4 minutes.</h2>
+        <p>Import your team from a CSV, pick a leave policy, run your first payroll cycle. Free for teams up to 10 — no card required.</p>
+        <div class="cta-actions">
+          <a class="btn btn-primary btn-lg" href="#">Get started free
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+          </a>
+          <a class="btn btn-ghost btn-lg" href="#">Book a 15-min demo</a>
+        </div>
+      </div>
+
+      <div class="cta-mini-mock" aria-hidden="true">
+        <div class="ttl">Migration checklist</div>
+        <div class="row"><span class="name">Import employee CSV</span><span class="stat ok">Done</span></div>
+        <div class="row"><span class="name">Set leave policies</span><span class="stat ok">Done</span></div>
+        <div class="row"><span class="name">Invite managers</span><span class="stat ok">Done</span></div>
+        <div class="row"><span class="name">Run first payroll</span><span class="stat warn">In 4 min</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== FOOTER ===================== -->
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <a class="brand" href="#">
+          <span class="brand-mark"><svg width="20" height="20"><use href="#leaf-logo"/></svg></span>
+          <span class="brand-name">WorkLeaf</span>
+        </a>
+        <p>HR management, simplified. Built for small and mid-sized teams that want the tools, not the bill.</p>
+        <span class="chip"><span class="dot"></span>All systems normal</span>
+      </div>
+
+      <div class="foot-col">
+        <h4>Product</h4>
+        <a href="#features">Leave</a>
+        <a href="#features">Attendance</a>
+        <a href="#features">Payroll</a>
+        <a href="#features">Analytics</a>
+        <a href="#features">Admin</a>
+      </div>
+
+      <div class="foot-col">
+        <h4>Company</h4>
+        <a href="#">About</a>
+        <a href="#">Customers</a>
+        <a href="#">Careers</a>
+        <a href="#">Press kit</a>
+        <a href="#">Contact</a>
+      </div>
+
+      <div class="foot-col">
+        <h4>Resources</h4>
+        <a href="#">Docs</a>
+        <a href="#">Changelog</a>
+        <a href="#">Help center</a>
+        <a href="#">API</a>
+        <a href="#">Status</a>
+      </div>
+
+      <div class="foot-col">
+        <h4>Legal</h4>
+        <a href="#">Privacy</a>
+        <a href="#">Terms</a>
+        <a href="#">Security</a>
+        <a href="#">DPA</a>
+        <a href="#">Cookies</a>
+      </div>
+    </div>
+
+    <div class="foot-bottom">
+      <span>© 2026 WorkLeaf Technologies. Made for lean HR teams.</span>
+      <div class="socials">
+        <a href="#" aria-label="X">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2H21l-6.522 7.45L22 22h-6.953l-4.93-6.37L4.4 22H1.64l6.97-7.964L1.5 2h7.13l4.46 5.85L18.244 2zm-2.43 18h1.928L7.27 4H5.21l10.604 16z"/></svg>
+        </a>
+        <a href="#" aria-label="LinkedIn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5C4.98 4.88 3.87 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5zM0 8h5v16H0V8zm7.5 0H12v2.18h.07c.6-1.13 2.07-2.32 4.27-2.32C21 7.86 22 10.4 22 14.13V24h-5v-8.7c0-2.07-.04-4.74-2.9-4.74-2.9 0-3.34 2.27-3.34 4.6V24h-5V8z"/></svg>
+        </a>
+        <a href="#" aria-label="GitHub">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5a12 12 0 0 0-3.79 23.38c.6.11.83-.26.83-.58v-2.03c-3.34.73-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.75.08-.74.08-.74 1.21.08 1.85 1.24 1.85 1.24 1.08 1.84 2.82 1.31 3.51 1 .11-.78.42-1.31.76-1.61-2.66-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.31-.54-1.53.11-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.29-1.55 3.3-1.23 3.3-1.23.66 1.65.24 2.87.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.62-5.49 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.83.58A12 12 0 0 0 12 .5z"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Sticky nav border on scroll
+  const nav = document.getElementById('nav');
+  const onScroll = () => {
+    if (window.scrollY > 8) nav.classList.add('scrolled');
+    else nav.classList.remove('scrolled');
+  };
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  // Reveal on scroll
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('in');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  // Stagger children of reveal-grids
+  document.querySelectorAll('.features-grid, .pains, .tests, .price-grid').forEach(grid => {
+    [...grid.children].forEach((child, i) => {
+      child.style.transitionDelay = (i * 60) + 'ms';
+    });
+  });
+</script>
+
+</body>
+</html>
